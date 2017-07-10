@@ -23,9 +23,9 @@ static void setup_handedness(void) {
   #else
     // I2C_MASTER_RIGHT is deprecated, use MASTER_RIGHT instead, since this works for both serial and i2c
     #if defined(I2C_MASTER_RIGHT) || defined(MASTER_RIGHT)
-      isLeftHand = !has_usb();
-    #else
       isLeftHand = has_usb();
+    #else
+      isLeftHand = !has_usb();
     #endif
   #endif
 }

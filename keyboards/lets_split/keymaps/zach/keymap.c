@@ -1,6 +1,9 @@
 #include "lets_split.h"
 #include "action_layer.h"
 #include "eeconfig.h"
+#ifdef AUDIO_ENABLE
+  #include "audio.h"
+#endif
 
 extern keymap_config_t keymap_config;
 
@@ -31,6 +34,7 @@ enum custom_keycodes {
 // Custom Keys
 #define ZC_CESC CTL_T(KC_ESC)   // Ctrl if held, Esc if tapped
 #define ZC_HYPR LCAG(KC_NO)     // Ctrl - Alt - GUI
+#define ZC_SENT RSFT_T(KC_ENT)  // RShift if held, Enter if tapped
 #define ZC_GUI MAGIC_UNNO_GUI   // Enable GUI key
 #define ZC_NGUI MAGIC_NO_GUI    // Disable GUI key
 
@@ -43,16 +47,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  * | *Esc  | A     | S     | D     | F     | G     |   | H     | J     | K     | L     | ; \ : | ' \ " |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | Shift | Z     | X     | C     | V     | B     |   | N     | M     | , \ < | . \ > | / \ ? | Enter |
+ * | Shift | Z     | X     | C     | V     | B     |   | N     | M     | , \ < | . \ > | / \ ? | Shift |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | Ctrl  | Func  | Alt   | Super | Lower | Hyper |   | Space | Raise | Left  | Down  | Up    | Right |
+ * | Ctrl  | Func  | Alt   | Super | Lower | Enter |   | Space | Raise | Left  | Down  | Up    | Right |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  */
 [_QWERTY] = KEYMAP( \
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
   ZC_CESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT , \
-  KC_LCTL, ADJUST,  KC_LALT, KC_LGUI, LOWER,   ZC_HYPR, KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, \
+  KC_LCTL, ADJUST,  KC_LALT, KC_LGUI, LOWER,   KC_ENT,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
 ),
 
 /* Colemak
@@ -61,16 +65,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  * | *Esc  | A     | R     | S     | T     | D     |   | H     | N     | E     | I     | O     | ' \ " |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | Shift | Z     | X     | C     | V     | B     |   | K     | M     | , \ < | . \ > | / \ ? | Enter |
+ * | Shift | Z     | X     | C     | V     | B     |   | K     | M     | , \ < | . \ > | / \ ? | Shift |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | Ctrl  | Func  | Alt   | Super | Lower | Hyper |   | Space | Raise | Left  | Down  | Up    | Right |
+ * | Ctrl  | Func  | Alt   | Super | Lower | Enter |   | Space | Raise | Left  | Down  | Up    | Right |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  */
 [_COLEMAK] = KEYMAP( \
   KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSPC, \
   ZC_CESC, KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT, \
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT , \
-  KC_LCTL, ADJUST,  KC_LALT, KC_LGUI, LOWER,   ZC_HYPR, KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, \
+  KC_LCTL, ADJUST,  KC_LALT, KC_LGUI, LOWER,   KC_ENT,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
 ),
 
 /* Dvorak
@@ -79,79 +83,81 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  * | *Esc  | A     | O     | E     | U     | I     |   | D     | H     | T     | N     | S     | / \ ? |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | Shift | ; \ : | Q     | J     | K     | X     |   | B     | M     | W     | V     | Z     | Enter |
+ * | Shift | ; \ : | Q     | J     | K     | X     |   | B     | M     | W     | V     | Z     | Shift |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | Ctrl  | Func  | Alt   | Super | Lower | Hyper |   | Space | Raise | Left  | Down  | Up    | Right |
+ * | Ctrl  | Func  | Alt   | Super | Lower | Enter |   | Space | Raise | Left  | Down  | Up    | Right |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  */
 [_DVORAK] = KEYMAP( \
   KC_TAB,  KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y,    KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_BSPC, \
   ZC_CESC, KC_A,    KC_O,    KC_E,    KC_U,    KC_I,    KC_D,    KC_H,    KC_T,    KC_N,    KC_S,    KC_SLSH, \
-  KC_LSFT, KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_ENT , \
-  KC_LCTL, ADJUST,  KC_LALT, KC_LGUI, LOWER,   ZC_HYPR, KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
+  KC_LSFT, KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT, \
+  KC_LCTL, ADJUST,  KC_LALT, KC_LGUI, LOWER,   KC_ENT,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
 ),
 
 /* Lower
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | `     | !     | @     | #     | $     | %     |   | ^     | &     | *     | (     | )     | Del   |
+ * | ~     | !     | @     | #     | $     | %     |   | ^     | &     | *     | (     | )     | Del   |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * |       | BTN1  | MS_U  | BTN2  | WH_U  |       |   | +     | {     | }     | [     | ]     |       |
+ * |       | BTN1  | MS_U  | BTN2  | WH_U  |       |   | _     | [     | ]     |       |       | \     |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * |       | MS_L  | MS_D  | MS_R  | WH_D  |       |   | =     | \     | Pipe  | <     | >     | Insrt |
+ * |       | MS_L  | MS_D  | MS_R  | WH_D  |       |   | +     | <     | >     |       |       | Insrt |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  * |       |       |       |       | **+** |       |   |       |       | Home  | Pg Dn | Pg Up | End   |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  */
 [_LOWER] = KEYMAP( \
-  KC_GRV,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DELT, \
-  _______, KC_BTN1, KC_MS_U, KC_BTN2, KC_WH_U, _______, KC_PLUS, KC_LCBR, KC_RCBR, KC_LBRC, KC_RBRC, _______, \
-  _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, _______, KC_EQL,  KC_BSLS, KC_PIPE, KC_LT,   KC_GT,   KC_INS,  \
+  KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DELT, \
+  _______, KC_BTN1, KC_MS_U, KC_BTN2, KC_WH_U, _______, KC_UNDS, KC_LBRC, KC_RBRC, _______, _______, KC_BSLS, \
+  _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, _______, KC_PLUS, KC_LT,   KC_GT,   _______, _______, KC_INS,  \
   _______, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END   \
 ),
 
 /* Raise
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | ~     | 1     | 2     | 3     | 4     | 5     |   | 6     | 7     | 8     | 9     | 0     |       |
+ * | `     | 1     | 2     | 3     | 4     | 5     |   | 6     | 7     | 8     | 9     | 0     |       |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * |       | F1    | F2    | F3    | F4    | F5    |   | F6    | 4     | 5     | 6     | -     |       |
+ * |       |       |       | (     | )     |       |   | -     | 4     | 5     | 6     |       |       |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | RShft | F7    | F8    | F9    | F10   | F11   |   | F12   | 1     | 2     | 3     | _     |       |
+ * | RShft |       |       | {     | }     |       |   | =     | 1     | 2     | 3     |       |       |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  * | RCtrl |       | RAlt  | RSupr |       |       |   |       | **+** | Mute  | Vol - | Vol + |       |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  */
 [_RAISE] = KEYMAP( \
-  KC_TILD, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
-  _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_4,    KC_5,    KC_6,    KC_MINS, _______, \
-  KC_RSFT, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_1,    KC_2,    KC_3,    KC_UNDS, _______, \
+  KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
+  _______, _______, _______, KC_LPRN, KC_RPRN, _______, KC_MINS, KC_4,    KC_5,    KC_6,    _______, _______, \
+  KC_RSFT, _______, _______, KC_LCBR, KC_RCBR, _______, KC_EQL,  KC_1,    KC_2,    KC_3,    _______, _______, \
   KC_RCTL, _______, KC_RALT, KC_RGUI, _______, _______, _______, _______, KC_MUTE, KC_VOLD, KC_VOLU, _______  \
 ),
 
 /* Adjust (Lower + Raise)
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * |       | Qwrty | Colmk | Dvork |       |       |   |       |       |       |       |       |       |
+ * |       | F1    | F2    | F3    | F4    | F5    |   | F6    | F7    | F8    | F9    | F10   | Reset |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | Reset | AuOn  | AgSwp | NoGUI |       |       |   |       |       |       |       |       |       |
+ * |       | AuOn  | AgSwp | NoGUI |       |       |   | Qwrty | Colmk | Dvrak | F11   | F12   |       |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  * | Caps  | AuOff | AgNrm | EnGUI |       |       |   |       |       | Prev  | Stop  | Pause | Next  |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * |       | **+** |       |       |       |       |   |       |       | FFwrd | MStop | MPlay | Rewnd |
+ * |       | **+** |       |       |       |       |   |       |       | Rewnd | MStop | MPlay | FFwrd |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  */
 [_ADJUST] =  KEYMAP( \
-  _______, QWERTY,  COLEMAK, DVORAK,  _______, _______, _______, _______, _______, _______, _______, KC_DEL,  \
-  RESET,   AU_ON,   AG_SWAP, ZC_NGUI, _______, _______, _______, _______, _______, _______, _______, _______, \
-  KC_CAPS, AU_OFF,  AG_NORM, ZC_GUI,  _______, _______, _______, _______, KC_MNXT, KC_STOP, KC_PAUS, KC_MPRV, \
-  _______, _______, _______, _______, _______, _______, _______, _______, KC_MFFD, KC_MSTP, KC_MPLY, KC_MRWD  \
+  _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  RESET,   \
+  _______, AU_ON,   AG_SWAP, ZC_NGUI, _______, _______, QWERTY,  COLEMAK, DVORAK,  KC_F11,  KC_F12,  _______, \
+  KC_CAPS, AU_OFF,  AG_NORM, ZC_GUI,  _______, _______, _______, _______, KC_MPRV, KC_STOP, KC_PAUS, KC_MNXT, \
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_MRWD, KC_MSTP, KC_MPLY, KC_MFFD  \
 )
 
 
 };
 
 #ifdef AUDIO_ENABLE
-float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
-float tone_dvorak[][2]     = SONG(DVORAK_SOUND);
-float tone_colemak[][2]    = SONG(COLEMAK_SOUND);
+float music_scale[][2]  = SONG(MUSIC_SCALE_SOUND);
+
+float tone_qwerty[][2]  = SONG(QWERTY_SOUND);
+float tone_dvorak[][2]  = SONG(DVORAK_SOUND);
+float tone_colemak[][2] = SONG(COLEMAK_SOUND);
 #endif
 
 void persistent_default_layer_set(uint16_t default_layer) {
@@ -219,3 +225,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
+
+
+#ifdef AUDIO_ENABLE
+
+void music_on_user(void)
+{
+    music_scale_user();
+}
+
+void music_scale_user(void)
+{
+    PLAY_NOTE_ARRAY(music_scale, false, 0);
+}
+
+#endif
