@@ -67,8 +67,10 @@ void action_exec(keyevent_t event)
 
 #if (defined(ONESHOT_TIMEOUT) && (ONESHOT_TIMEOUT > 0))
     if (has_oneshot_layer_timed_out()) {
-        dprintf("Oneshot layer: timeout\n");
         clear_oneshot_layer_state(ONESHOT_OTHER_KEY_PRESSED);
+    }
+    if (has_oneshot_mods_timed_out()) {
+        clear_oneshot_mods();
     }
 #endif
 
@@ -617,6 +619,7 @@ void register_code(uint8_t code)
 #endif
         add_key(KC_CAPSLOCK);
         send_keyboard_report();
+        wait_ms(100);        
         del_key(KC_CAPSLOCK);
         send_keyboard_report();
     }
@@ -627,6 +630,7 @@ void register_code(uint8_t code)
 #endif
         add_key(KC_NUMLOCK);
         send_keyboard_report();
+        wait_ms(100);        
         del_key(KC_NUMLOCK);
         send_keyboard_report();
     }
@@ -637,6 +641,7 @@ void register_code(uint8_t code)
 #endif
         add_key(KC_SCROLLLOCK);
         send_keyboard_report();
+        wait_ms(100);        
         del_key(KC_SCROLLLOCK);
         send_keyboard_report();
     }
