@@ -3,15 +3,6 @@
 
 #include "../../config.h"
 
-/*
- * Override default pinout for handwire
- */
-#undef MATRIX_ROW_PINS 
-#define MATRIX_ROW_PINS { B0, B1, B2, B3, B7 }
-#undef MATRIX_COL_PINS 
-#define MATRIX_COL_PINS { F0, F1, F4, F5, F6, F7, B6, B5, B4, D7, D6, D4 }
-#undef BACKLIGHT_PIN 
-#define BACKLIGHT_PIN C7
 
 #ifdef AUDIO_ENABLE
     #define STARTUP_SONG SONG(PLANCK_SOUND)
