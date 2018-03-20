@@ -41,3 +41,17 @@
 //#define MIDI_TONE_KEYCODE_OCTAVES 2
 
 #endif
+
+
+// prevent rapid `key,key2` reverting to `mod+key2` if first key is
+// set up as mod tappable
+#define IGNORE_MOD_TAP_INTERRUPT
+
+// prevents `mod+key` press from missing `key` if completed within
+// tapping term
+#define PERMISSIVE_HOLD
+
+// prevents pressed mod from being stuck as pressed if mod doesn't
+// exist on newly selected layer
+#define PREVENT_STUCK_MODIFIERS
+

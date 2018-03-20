@@ -10,19 +10,15 @@ My first ortholinear layout featuring:
 
 ## Flashing
 
-In this directory, run the following commands:
+In qmk's root directory, run the following commands:
 
 ```shell
 # compile the hex file
-make rev2-zach
+make lets_split/rev2:zachfedor
 
-# move to build directory
-cd ../../../.build
+# flash the Pro Micro
+make lets_split/rev2:zachfedor:avrdude
 
-# ensure your Pro Micro is in the bootloader mode
-ls /dev/tty*
-
-# flash the Pro Micro pointing at the proper /dev/tty* port
-avrdude -p atmega32u4 -c avr109 -P /dev/tty.usbmodem1411 -U flash:w:lets_split_rev2_zachr.hex
+# reset the Pro Micro when prompted by shorting RST and GND pins
 ```
 
