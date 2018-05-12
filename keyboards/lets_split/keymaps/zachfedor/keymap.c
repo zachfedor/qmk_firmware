@@ -103,7 +103,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  * |       | MS_L  | MS_D  | MS_R  | WH_D  |       |   |   +   |   !   |   @   |   #   |       | Insrt |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * |       |       |       |       | **+** |       |   |       |       | Home  | Pg Dn | Pg Up |  End  |
+ * |       |       |       |       | *___* |       |   |       |       | Home  | Pg Dn | Pg Up |  End  |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  */
 [_LOWER] = KEYMAP( \
@@ -121,7 +121,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  * | RShft |   <   |   >   |   {   |   }   |       |   |   =   |   1   |   2   |   3   |       |       |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | RCtrl |       | RAlt  | RSupr |       |       |   |       | **+** | Mute  | Vol - | Vol + |       |
+ * | RCtrl |       | RAlt  | RSupr |       |       |   |       | *___* | Mute  | Vol - | Vol + |       |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  */
 [_RAISE] = KEYMAP( \
@@ -133,19 +133,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Adjust (Lower + Raise)
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * |       | F1    | F2    | F3    | F4    | F5    |   | F6    | F7    | F8    | F9    | F10   | Reset |
+ * |       |  F1   |  F2   |  F3   |  F4   |  F5   |   |  F6   |  F7   |  F8   |  F9   |  F10  | Reset |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * |       | AuOn  | AgSwp | NoGUI |       |       |   | Qwrty | Colmk | Dvrak | F11   | F12   |       |
+ * |       |       | AgSwp |  GUI  | AuOn  |       |   | Qwrty | Colmk | Dvrak |  F11  |  F12  |       |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * | Caps  | AuOff | AgNrm | EnGUI |       |       |   |       |       | Prev  | Stop  | Pause | Next  |
+ * | Caps  |       | AgNrm | " Off | " Off |       |   |       |       | Prev  | Stop  | Pause | Next  |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
- * |       |       |       |       | **+** |       |   |       | **+** | Rewnd | MStop | MPlay | FFwrd |
+ * |       |       |       |       | *___* |       |   |       | *___* | Rewnd | MStop | MPlay | FFwrd |
  * | ----- | ----- | ----- | ----- | ----- | ----- |   | ----- | ----- | ----- | ----- | ----- | ----- |
  */
 [_ADJUST] =  KEYMAP( \
   _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  RESET,   \
-  _______, AU_ON,   AG_SWAP, ZC_NGUI, _______, _______, QWERTY,  COLEMAK, DVORAK,  KC_F11,  KC_F12,  _______, \
-  KC_CAPS, AU_OFF,  AG_NORM, ZC_GUI,  _______, _______, _______, _______, KC_MPRV, KC_STOP, KC_PAUS, KC_MNXT, \
+  _______, _______, AG_SWAP, ZC_GUI,  AU_ON,   _______, QWERTY,  COLEMAK, DVORAK,  KC_F11,  KC_F12,  _______, \
+  KC_CAPS, _______, AG_NORM, ZC_NGUI, AU_OFF,  _______, _______, _______, KC_MPRV, KC_STOP, KC_PAUS, KC_MNXT, \
   _______, _______, _______, _______, _______, _______, _______, _______, KC_MRWD, KC_MSTP, KC_MPLY, KC_MFFD  \
 )
 
